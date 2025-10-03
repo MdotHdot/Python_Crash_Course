@@ -1,0 +1,13 @@
+-----------------------------------------------------------------------------
+In alien invasion, the playesr controls a spaceship,
+that appears on the bottom centre of the screen
+player can move the ship using left and right key
+shoot using the space key
+when the game begins a fleet fills the sky  and moves across and down the screen
+the player shoots and destroys the aliens
+if the player destroys all aliens, a new fleet appears , and moves faster each round
+if aliens hit the bottom of the screen or player the game is over.
+----------------------------------------------------------------------------
+
+Stage 1 - Build the ship
+--------
