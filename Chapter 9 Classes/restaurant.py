@@ -35,17 +35,34 @@ class Restaurant:
         else:
             print("You can't decrement the number of customers served with a negative value!")
         
-restaurant_1 = Restaurant("The Gourmet Kitchen", "French")
-restaurant_1.describe_restaurant()
-restaurant_1.open_restaurant()
-restaurant_1.set_customer_count(30)
-restaurant_1.set_customer_served(50)
-restaurant_1.increment_customer_served(-50)
+class IceCreamStand(Restaurant):
+    """A class to represent an ice cream stand, inheriting from Restaurant."""
+
+    def __init__(self, name, cuisine_type, flavors=None):
+        """Initializes the ice cream stand with a name, cuisine type, and optional flavors."""
+        super().__init__(name, cuisine_type)
+        print(f"Creating an ice cream stand named {self.name} that serves {self.cuisine_type} cuisine.")
+        self.flavors = flavors if flavors is not None else []
+
+    def display_flavors(self):
+        """Displays the available ice cream flavors."""
+        if self.flavors:
+            print(f"{self.name} offers the following ice cream flavors: {', '.join(self.flavors)}")
+        else:
+            print(f"{self.name} currently has no ice cream flavors available.")
+icecream1 = IceCreamStand("Sweet Treats", "Dessert", ["Vanilla", "Chocolate", "Strawberry"])
+
+# restaurant_1 = Restaurant("The Gourmet Kitchen", "French")
+# restaurant_1.describe_restaurant()
+# restaurant_1.open_restaurant()
+# restaurant_1.set_customer_count(30)
+# restaurant_1.set_customer_served(50)
+# restaurant_1.increment_customer_served(-50)
 
 
-restaurant_2 = Restaurant("Spicy Delight", "Indian", 50)
-restaurant_2.describe_restaurant()
-restaurant_2.open_restaurant()
-restaurant_2.set_customer_count(50)
-restaurant_2.set_customer_served(100)
-restaurant_2.increment_customer_served(20)
+# restaurant_2 = Restaurant("Spicy Delight", "Indian", 50)
+# restaurant_2.describe_restaurant()
+# restaurant_2.open_restaurant()
+# restaurant_2.set_customer_count(50)
+# restaurant_2.set_customer_served(100)
+# restaurant_2.increment_customer_served(20)

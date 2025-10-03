@@ -1,0 +1,18 @@
+guest name is: travis
+guest name is: /usr/local/bin/python3 "/Users/matthinton/Documents/Python/Python_Crash_Course/Python_Crash_Course/Chapter 10 files & exceptions/guest.py"
+guest name is: matt
+guest name is: tash
+guest name is: travis
+pete
+bas
+paul
+phil
+pauline
+zombie
+peterGuest name is: 
+ Guest name is: 
+ peterGuest name is: 
+ steve
+ Guest name is: helen
+ Guest name is: kyle
+ Guest name is: crash

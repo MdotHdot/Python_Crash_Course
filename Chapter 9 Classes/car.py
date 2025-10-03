@@ -44,11 +44,11 @@ class Car:
         
 #   Example usage of the Car class
 
-my_used_car = Car("Honda", "Civic", 2018)
-print(my_used_car.get_car_description())
-my_used_car.update_odometer(30000)
-my_used_car.read_odometer()
-my_used_car.start_engine()
-my_used_car.increment_odometer(500)
-my_used_car.stop_engine()
-my_used_car.read_odometer()
+# my_used_car = Car("Honda", "Civic", 2018)
+# print(my_used_car.get_car_description())
+# my_used_car.update_odometer(30000)
+# my_used_car.read_odometer()
+# my_used_car.start_engine()
+# my_used_car.increment_odometer(500)
+# my_used_car.stop_engine()
+# my_used_car.read_odometer()
