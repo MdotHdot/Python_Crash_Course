@@ -1,8 +1,11 @@
 #this is the alien invasion Class for displaying the screen
 # running and quitting the game
 import sys
+from time import sleep
+
 import pygame
 from settings import Settings
+from game_stats import GameStats
 from ship import Ship
 #from pilot import Pilot
 from bullet import Bullet
@@ -21,6 +24,8 @@ class AlienInvasion:
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
         
+        # Create an instance to store game statistics.
+        self.stats = GameStats(self)
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         #self.pilot = Pilot(self)
@@ -99,6 +104,13 @@ class AlienInvasion:
         # Remove any bullets and aliens that have collided.
         collisions = pygame.sprite.groupcollide(
             self.bullets, self.aliens, True, True)
+        
+    def _ship_hit(self):
+        """Respond to the ship being hit by an alien."""
+        # Decrement ships_left.
+        self.stats.ships_left -= 1
+        
+    
     def _update_aliens(self):
         """Update the positions of all aliens in the fleet."""
         self._check_fleet_edges()
