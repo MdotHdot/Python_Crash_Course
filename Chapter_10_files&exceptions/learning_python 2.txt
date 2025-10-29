@@ -1,0 +1,3 @@
+what i have learned since writing pyhton
+how to use variable and functions
+object orientated programming
