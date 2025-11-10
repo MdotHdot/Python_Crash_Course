@@ -2,14 +2,15 @@
 # running and quitting the game
 import sys
 from time import sleep
-
 import pygame
 from settings import Settings
 from game_stats import GameStats
+from button import Button
 from ship import Ship
-#from pilot import Pilot
 from bullet import Bullet
 from alien import Alien
+
+
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
@@ -18,16 +19,20 @@ class AlienInvasion:
         """Initialize the game, and create game resources."""
         pygame.init()
         #Start ALien Invasion in an active state
-        self.game_active = True
+        self.game_active = False
         #Create an instance to store settings.
+        
         self.settings = Settings()
+        
         self.clock = pygame.time.Clock()
+        
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
-        pygame.display.set_caption("Alien Invasion")
         
-        # Create an instance to store game statistics.
+        pygame.display.set_caption("Alien Invasion")
+           
+         # Create an instance to store game statistics.
         self.stats = GameStats(self)
         
         self.ship = Ship(self)
@@ -38,7 +43,11 @@ class AlienInvasion:
         self._create_fleet()
         
         # Set the background color
-        self.bg_color = (200, 230, 230)
+        self.bg_color = (0,0,0)
+        #Start Alien Invasion in an inactive state
+        # self.game_active = False
+        # Make the Play button.
+        self.play_button = Button(self, "Play")
         
     def run_game(self):
         """Start the main loop for the game."""
@@ -48,8 +57,8 @@ class AlienInvasion:
                 self.ship.update()
                 self._update_bullets()
                 self._update_aliens()
-                self._update_screen()  
-                self.clock.tick(60)  # Limit to 60 frames per second
+            self._update_screen()  
+            self.clock.tick(60)  # Limit to 60 frames per second
                         
 
                     
@@ -64,6 +73,29 @@ class AlienInvasion:
                     self._check_keydown_events(event)
                 elif event.type == pygame.KEYUP:
                     self._check_keyup_events(event)
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = pygame.mouse.get_pos()
+                    self._check_play_button(mouse_pos)
+                    
+    def _check_play_button(self, mouse_pos):
+        '''Start a new game when Player clicks Play'''
+        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.game_active:
+            #reset game statistics
+            self.stats.reset_stats()
+            self.game_active = True
+            
+            #get rid of remaining bullets and aliens
+            self.bullets.empty()
+            self.aliens.empty()
+            
+            #reset screen for next game
+            self._create_fleet()
+            self.ship.center_ship()
+            
+            #Hide the mouse cursor
+            pygame.mouse.set_visible(False)
+            
 
     def _check_keydown_events(self, event):
         """Respond to keypresses."""
@@ -126,6 +158,7 @@ class AlienInvasion:
             sleep(1)
         else:
             self.game_active = False
+            pygame.mouse.set_visible(True)
         
     def _check_aliens_bottom(self):
         """Check if any aliens have reached the bottom of the screen."""
@@ -198,6 +231,9 @@ class AlienInvasion:
             self.ship.blitme()
             #self.pilot.blitme()
             self.aliens.draw(self.screen)
+            #Draw the play button if the game is inactive
+            if not self.game_active:
+                self.play_button.draw_button()
             # Make the most recently drawn screen visible.
             pygame.display.flip()
         
