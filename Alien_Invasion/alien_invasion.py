@@ -34,6 +34,9 @@ class AlienInvasion:
            
          # Create an instance to store game statistics.
         self.stats = GameStats(self)
+        
+        self.button_hits = 0
+        self.button_hits_to_start = 3 
         self.menu_ship = MenuShip(self)
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
@@ -59,6 +62,8 @@ class AlienInvasion:
                 self._update_aliens()
             else:
                 self.menu_ship.update()
+                self.play_button.update()
+                self.check_bullet_button_collisions()
                 
             self._update_bullets()               
             self._update_screen()  
@@ -162,11 +167,31 @@ class AlienInvasion:
                 self.bullets.remove(bullet)
         self.check_bullet_alien_collisions()
         
+
+        
     def  check_bullet_alien_collisions(self):
         """Respond to bullet-alien collisions."""
         # Remove any bullets and aliens that have collided.
         collisions = pygame.sprite.groupcollide(
             self.bullets, self.aliens, True, True)
+        
+    def check_bullet_button_collisions(self):
+    
+        "'Responds to bullet menu collision when game not active"
+        
+        # We iterate over a copy of the bullets in case we remove them
+        for bullet in self.bullets.copy(): 
+            
+            # 1. Check if the bullet's rect hits the button's rect
+            if bullet.rect.colliderect(self.play_button.rect):              
+                # 2. A hit occurred: Increment the counter
+                self.button_hits += 1        
+                # 3. Remove the bullet so it doesn't hit the button twice 
+                self.bullets.remove(bullet)
+            # checks counter to start gsame 
+            if self.button_hits >= self.button_hits_to_start:    
+                sleep(1)
+                self._start_game()
         
     def _ship_hit(self):
         """Respond to the ship being hit by an alien."""
@@ -183,6 +208,8 @@ class AlienInvasion:
             # Pause.
             sleep(1)
         else:
+            self.aliens.empty()
+            self.aliens.empty()
             self.game_active = False
             pygame.mouse.set_visible(True)
         
@@ -263,8 +290,9 @@ class AlienInvasion:
             self.aliens.draw(self.screen)
             #Draw the play button if the game is inactive
             if not self.game_active:
-                self.play_button.draw_button()                
+                self.play_button.draw_button()            
                 self.menu_ship.blitme()
+                
                        
             # Make the most recently drawn screen visible.
             pygame.display.flip()
