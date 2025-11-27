@@ -7,7 +7,7 @@ from settings import Settings
 from game_stats import GameStats
 from button import Button
 from ship import Ship
-
+from scoreboard import Scoreboard
 from menu_ship import MenuShip
 from bullet import Bullet
 from alien import Alien
@@ -60,6 +60,7 @@ class AlienInvasion:
             if self.game_active:            
                 self.ship.update()               
                 self._update_aliens()
+                
             else:
                 self.menu_ship.update()
                 self.play_button.update()
@@ -86,6 +87,8 @@ class AlienInvasion:
         '''Start a new game when Player clicks Play'''
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)      
         if button_clicked  and not self.game_active :
+            #reset game settings.
+            self.settings.initialize_dynamic_settings()
             self._start_game()
             
     
@@ -160,6 +163,7 @@ class AlienInvasion:
         if self.game_active and not self.aliens:
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
             
          # Get rid of bullets that have disappeared.
         for bullet in self.bullets.copy():
