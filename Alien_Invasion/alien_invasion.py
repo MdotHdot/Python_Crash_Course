@@ -32,9 +32,9 @@ class AlienInvasion:
         
         pygame.display.set_caption("Alien Invasion")
            
-         # Create an instance to store game statistics.
+         # Create an instance to store game statistics, and create scoreboard
         self.stats = GameStats(self)
-        
+        self.sb = Scoreboard(self)
         self.button_hits = 0
         self.button_hits_to_start = 3 
         self.menu_ship = MenuShip(self)
@@ -89,7 +89,10 @@ class AlienInvasion:
         if button_clicked  and not self.game_active :
             #reset game settings.
             self.settings.initialize_dynamic_settings()
-            self._start_game()
+            self.stats.reset_stats()
+            self.sb.prep_score()
+            self.sb.prep_level()
+            self.sb.prep_ships()
             
     
             
@@ -165,6 +168,10 @@ class AlienInvasion:
             self._create_fleet()
             self.settings.increase_speed()
             
+            #Level increment
+            self.stats.level += 1
+            self.sb.prep_level()
+            
          # Get rid of bullets that have disappeared.
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0 or bullet.rect.left >= self.settings.screen_width:
@@ -178,6 +185,11 @@ class AlienInvasion:
         # Remove any bullets and aliens that have collided.
         collisions = pygame.sprite.groupcollide(
             self.bullets, self.aliens, True, True)
+        
+        for aliens in collisions.values():
+            self.stats.score += self.settings.alien_points * len(aliens)
+            self.sb.prep_score()
+            self.sb.check_high_score()
         
     def check_bullet_button_collisions(self):
     
@@ -203,8 +215,10 @@ class AlienInvasion:
         if self.stats.ships_left > 0:
             self.stats.ships_left -= 1       
             #get rid of any remaining aliens and bullets.
+            self.sb.prep_ships()
             self.aliens.empty()
             self.bullets.empty()
+            self.settings.initialize_dynamic_settings()
             
             # Create a new fleet and center the ship.
             self._create_fleet()
@@ -292,6 +306,8 @@ class AlienInvasion:
             self.ship.blitme()
             #self.pilot.blitme()
             self.aliens.draw(self.screen)
+            #Draw the Scoreboard 
+            self.sb.show_score()
             #Draw the play button if the game is inactive
             if not self.game_active:
                 self.play_button.draw_button()            
